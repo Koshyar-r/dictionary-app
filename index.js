@@ -20,20 +20,34 @@ function data(result, word) {
         document.querySelector(".meaning span").innerText = definitions.definition
         document.querySelector(".example span").innerText = definitions.example
         audio = new Audio(result[0].phonetics[0].audio)
-
+    
+        if(result[0].phonetics[0].audio == '') {
+            audio = new Audio(result[0].phonetics[1].audio)
+        } else {
+            audio = new Audio(result[0].phonetics[0].audio)
+        }
+       
         if(definitions.example == undefined) {
             Example.parentElement.style.display = "none"
         } else {
             Example.parentElement.style.display = "block"
         }
 
+        if(result[0].phonetics[0].text == undefined) {
+            let BackupPhonetic
+            BackupPhonetic = `${result[0].meanings[0].partOfSpeech} /${result[0].phonetics[1].text}/`
+            document.querySelector(".word span").innerText = BackupPhonetic
+        } else {
+            phonetics = `${result[0].meanings[0].partOfSpeech} /${result[0].phonetics[0].text}/`
+        }
+        
         if(definitions.synonyms[0] == undefined) {
             Synonyms.parentElement.style.display = "none"
         } else {
             Synonyms.parentElement.style.display = "block"
             Synonyms.innerHTML = ""
-            for (let i = 0 ; i < 3 ; i++) {
-                let tag = `<span onclick=search('${definitions.synonyms[i]}')>${definitions.synonyms[i]},</span>`
+            for (let i = 0 ; i < 1 ; i++) {
+                let tag = `<span onclick="search('${definitions.synonyms[i]}')">${definitions.synonyms[i]},</span>`
                 tag = i == 4 ? tag = `<span onclick="search('${definitions.synonyms[i]}')">${definitions.synonyms[4]}</span>` : tag
                 Synonyms.insertAdjacentHTML("beforeend", tag)
             }
